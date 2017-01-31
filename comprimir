@@ -1,0 +1,30 @@
+#!/bin/bash
+export alvo=$1
+export destino=$2
+export CPUNUMBER=$(grep proc /proc/cpuinfo  | wc -l)
+function ajuda() {
+	echo ERRO
+	echo Erro nos parametros
+	echo $0 origem destino.tgz
+}
+function processar() {
+	du -sh $alvo
+	tar cf - $alvo |pv  -s $(du -sb $alvo| awk '{print $1}') |pigz -p $CPUNUMBER -9 > $destino
+}
+if [ $# -lt 2 ]
+then
+	ajuda
+	exit 1
+else
+	if [ -a $alvo ]
+	then
+		clear
+		setterm --foreground green
+		figlet $CPUNUMBER threads
+		setterm --foreground red
+		echo Comprimindo $1 para $2
+		setterm --foreground blue
+		processar $1 $2
+		setterm --default
+	fi
+fi

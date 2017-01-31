@@ -1,0 +1,3 @@
+#!/bin/bash
+dellombin > /dev/null & sleep 5; disown %1
+exit
