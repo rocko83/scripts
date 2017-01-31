@@ -1,4 +1,5 @@
 #!/bin/bash
+#DAMATO
 export alvo=$1
 export destino=$2
 export CPUNUMBER=$(grep proc /proc/cpuinfo  | wc -l)
