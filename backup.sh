@@ -35,7 +35,8 @@ function backup() {
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
 	comprimir $temporario/VBOX/Producao/wiki/ /media/damato/wd_crypt/netshoes/wiki.tgz
-	comprimir $temporario/VBOX/Producao/Win7-netshoes/ /media/damato/wd_crypt/netshoes/w7.tgz
+	#comprimir $temporario/VBOX/Producao/Win7-netshoes/ /media/damato/wd_crypt/netshoes/w7.tgz
+	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ /media/damato/wd_crypt/netshoes/NETSHOES-W10.tgz
 	comprimir $temporario/projetos/ /media/damato/wd_crypt/netshoes/projetos.tgz
 	comprimir $temporario/programas/ /media/damato/wd_crypt/netshoes/programas.tgz
 	comprimir $temporario/Pictures/ /media/damato/wd_crypt/netshoes/pic.tgz
