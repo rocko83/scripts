@@ -22,7 +22,9 @@ function home() {
 	echo Efetuando backup do HOME
 	temporario=$(cat $TEMPOFILE)
 	cd $temporario
-	tar cf - $(cat $TEMPOLISTA) | pv -s $(cat $TEMPOLISTA| xargs -i du -sk {} | awk '{s = s + $1} END {print s}')K | pigz -p 4 -9 > /media/damato/wd_crypt/netshoes/home.tgz
+	tamanho=$(cat $TEMPOLISTA| xargs -i du -sk {} | awk '{s = s + $1} END {print s}')
+	echo $tamanho | awk '{print $1 / 1024 ^2}'| xargs -i echo Comprimindo {} GB
+	tar cf - $(cat $TEMPOLISTA) | pv -s "$tamanho"k | pigz -p 4 -9 > /media/damato/wd_crypt/netshoes/home.tgz
 	cd -
 }
 function gera_lista_home() {
