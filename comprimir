@@ -19,13 +19,8 @@ then
 else
 	if [ -a $alvo ]
 	then
-		clear
-		setterm --foreground green
 		figlet $CPUNUMBER threads
-		setterm --foreground red
 		echo Comprimindo $1 para $2
-		setterm --foreground blue
 		processar $1 $2
-		setterm --default
 	fi
 fi

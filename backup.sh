@@ -1,6 +1,9 @@
 #!/bin/bash
 export TEMPOFILE=/tmp/backup.sh.tmp
 export TEMPOLISTA=/tmp/backup.sh.lista
+export DESTINO=/media/damato/wd_crypt/netshoes
+export DATA=$(date +"%y%m%d")
+export DIRDESTINO=$DESTINO/$DATA
 function ajuda() {
 	echo falta de argumentos
 	echo criar\/remover\/backup\/home\/gerahome\/tudo
@@ -19,12 +22,13 @@ function remover() {
 	lvremove -f ubuntu-vg/snaph
 }
 function home() {
+	mkdir -p $DIRDESTINO
 	echo Efetuando backup do HOME
 	temporario=$(cat $TEMPOFILE)
 	cd $temporario
 	tamanho=$(cat $TEMPOLISTA| xargs -i du -sk {} | awk '{s = s + $1} END {print s}')
 	echo $tamanho | awk '{print $1 / 1024 ^2}'| xargs -i echo Comprimindo {} GB
-	tar cf - $(cat $TEMPOLISTA) | pv -s "$tamanho"k | pigz -p 4 -9 > /media/damato/wd_crypt/netshoes/home.tgz
+	tar cf - $(cat $TEMPOLISTA) | pv -s "$tamanho"k | pigz -p 4 -9 > $DIRDESTINO/home.tgz
 	cd -
 }
 function gera_lista_home() {
@@ -36,13 +40,13 @@ function gera_lista_home() {
 function backup() {
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
-	comprimir $temporario/VBOX/Producao/wiki/ /media/damato/wd_crypt/netshoes/wiki.tgz
-	#comprimir $temporario/VBOX/Producao/Win7-netshoes/ /media/damato/wd_crypt/netshoes/w7.tgz
-	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ /media/damato/wd_crypt/netshoes/NETSHOES-W10.tgz
-	comprimir $temporario/projetos/ /media/damato/wd_crypt/netshoes/projetos.tgz
-	comprimir $temporario/programas/ /media/damato/wd_crypt/netshoes/programas.tgz
-	comprimir $temporario/Pictures/ /media/damato/wd_crypt/netshoes/pic.tgz
-	comprimir $temporario/Documents/ /media/damato/wd_crypt/netshoes/doc.tgz
+	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
+	#comprimir $temporario/VBOX/Producao/Win7-netshoes/ $DIRDESTINO/w7.tgz
+	#comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
+	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
+	comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
+	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
+	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
 }
 if [ $# -ne 1 ]
 then
