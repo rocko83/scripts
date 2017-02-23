@@ -6,7 +6,7 @@ export DATA=$(date +"%y%m%d")
 export DIRDESTINO=$DESTINO/$DATA
 function ajuda() {
 	echo falta de argumentos
-	echo criar\/remover\/backup\/home\/gerahome\/tudo
+	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config
 }
 function criar() {
 	temporario=$(mktemp -d)
@@ -41,12 +41,16 @@ function backup() {
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
 	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
-	#comprimir $temporario/VBOX/Producao/Win7-netshoes/ $DIRDESTINO/w7.tgz
-	#comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
+	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
 	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
 	comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
 	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
+}
+function config() {
+	apt list --installed > $DIRDESTINO/apt-list-installed
+	sudo $(which comprimir) /etc $DIRDESTINO/etc.tgz
+	sudo chown $(grep $(id -u) /etc/passwd | awk -F : '{print $1}'):$(grep $(id -u) /etc/passwd | awk -F : '{print $1}') $DIRDESTINO/etc.tgz
 }
 if [ $# -ne 1 ]
 then
@@ -70,9 +74,13 @@ case $1 in
 		home
 		;;
 	tudo)
+		config
 		gera_lista_home
 		home
 		backup
+		;;
+	config)
+		config
 		;;
 	*)
 		ajuda
