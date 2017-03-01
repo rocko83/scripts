@@ -38,6 +38,7 @@ function gera_lista_home() {
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {
+	mkdir -p $DIRDESTINO
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
 	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
@@ -48,6 +49,7 @@ function backup() {
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
 }
 function config() {
+	mkdir -p $DIRDESTINO
 	apt list --installed > $DIRDESTINO/apt-list-installed
 	sudo $(which comprimir) /etc $DIRDESTINO/etc.tgz
 	sudo chown $(grep $(id -u) /etc/passwd | awk -F : '{print $1}'):$(grep $(id -u) /etc/passwd | awk -F : '{print $1}') $DIRDESTINO/etc.tgz
