@@ -9,6 +9,7 @@ function ajuda() {
 	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config
 }
 function criar() {
+	mkdir -p $DIRDESTINO
 	temporario=$(mktemp -d)
 	echo $temporario > $TEMPOFILE
 	lvcreate -s -L 20G -n snaph ubuntu-vg/damatoluks
@@ -22,8 +23,8 @@ function remover() {
 	lvremove -f ubuntu-vg/snaph
 }
 function home() {
-	mkdir -p $DIRDESTINO
 	echo Efetuando backup do HOME
+	mkdir -p $DIRDESTINO
 	temporario=$(cat $TEMPOFILE)
 	cd $temporario
 	tamanho=$(cat $TEMPOLISTA| xargs -i du -sk {} | awk '{s = s + $1} END {print s}')
@@ -33,6 +34,7 @@ function home() {
 }
 function gera_lista_home() {
 	echo Gerando lista do HOME
+	mkdir -p $DIRDESTINO
 	temporario=$(cat $TEMPOFILE)
 	ls -1a $temporario | egrep -wv "^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
