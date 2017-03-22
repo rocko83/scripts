@@ -1,15 +1,9 @@
-#!/bin/bash
-export TEMPOFILE=/tmp/backup.sh.tmp
-export TEMPOLISTA=/tmp/backup.sh.lista
-export DESTINO=/media/damato/wd_crypt/netshoes
-export DATA=$(date +"%y%m%d")
-export DIRDESTINO=$DESTINO/$DATA
+#!/bin/bash -x
 function ajuda() {
 	echo falta de argumentos
-	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config
+	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config \| \[\Diretprio de destino\]
 }
 function criar() {
-	mkdir -p $DIRDESTINO
 	temporario=$(mktemp -d)
 	echo $temporario > $TEMPOFILE
 	lvcreate -s -L 20G -n snaph ubuntu-vg/damatoluks
@@ -24,7 +18,6 @@ function remover() {
 }
 function home() {
 	echo Efetuando backup do HOME
-	mkdir -p $DIRDESTINO
 	temporario=$(cat $TEMPOFILE)
 	cd $temporario
 	tamanho=$(cat $TEMPOLISTA| xargs -i du -sk {} | awk '{s = s + $1} END {print s}')
@@ -34,13 +27,11 @@ function home() {
 }
 function gera_lista_home() {
 	echo Gerando lista do HOME
-	mkdir -p $DIRDESTINO
 	temporario=$(cat $TEMPOFILE)
 	ls -1a $temporario | egrep -wv "^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {
-	mkdir -p $DIRDESTINO
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
 	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
@@ -51,16 +42,30 @@ function backup() {
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
 }
 function config() {
-	mkdir -p $DIRDESTINO
 	apt list --installed > $DIRDESTINO/apt-list-installed
 	sudo $(which comprimir) /etc $DIRDESTINO/etc.tgz
 	sudo chown $(grep $(id -u) /etc/passwd | awk -F : '{print $1}'):$(grep $(id -u) /etc/passwd | awk -F : '{print $1}') $DIRDESTINO/etc.tgz
 }
-if [ $# -ne 1 ]
+if [ $# -eq 0 ]
 then
 	ajuda
 	exit 1
 fi
+if [ $# -eq 2 ]
+then
+	if [ -a $2 ]
+	then
+		export DESTINO=$(echo $2 | sed -e "s/\/$//g")
+	else
+		echo erro caminho de destino, verifique se $2 existe
+	fi
+else
+	export DESTINO=/media/damato/wd_crypt/netshoes
+fi
+export TEMPOFILE=/tmp/backup.sh.tmp
+export TEMPOLISTA=/tmp/backup.sh.lista
+export DATA=$(date +"%y%m%d")
+export DIRDESTINO=$DESTINO/$DATA
 case $1 in
 	criar)
 		criar
@@ -69,15 +74,18 @@ case $1 in
 		remover
 		;;
 	backup)
+		mkdir -p $DIRDESTINO
 		backup
 		;;
 	gerahome)
 		gera_lista_home
 		;;
 	home)
+		mkdir -p $DIRDESTINO
 		home
 		;;
 	tudo)
+		mkdir -p $DIRDESTINO
 		config
 		gera_lista_home
 		home

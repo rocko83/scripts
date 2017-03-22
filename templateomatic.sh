@@ -6,6 +6,7 @@ ENDERECO=$(echo $NOME | awk -F - '{print $2}')
 if [ $# -ne 1 ]
 then
 	echo falta de argumentos
+	echo $0 \<nome da guest\>
 	exit 1
 fi
 echo Ligando guest $NOME
@@ -38,7 +39,7 @@ do
 	then
 		sleep 10
 		echo  $USUARIO@$NOME.rocko83.com.br on-line
-		ssh $USUARIO@$NOME.rocko83.com.br
+		#ssh $USUARIO@$NOME.rocko83.com.br sudo shutdown -Ph now
 		exit
 	fi
 	echo  $USUARIO@$NOME.rocko83.com.br ainda off-line
