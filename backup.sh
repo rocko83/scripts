@@ -46,6 +46,7 @@ function config() {
 	sudo $(which comprimir) /etc $DIRDESTINO/etc.tgz
 	sudo chown $(grep $(id -u) /etc/passwd | awk -F : '{print $1}'):$(grep $(id -u) /etc/passwd | awk -F : '{print $1}') $DIRDESTINO/etc.tgz
 }
+DESTINOPADRAO=/media/damato/wd_crypt/netshoes
 if [ $# -eq 0 ]
 then
 	ajuda
@@ -58,9 +59,16 @@ then
 		export DESTINO=$(echo $2 | sed -e "s/\/$//g")
 	else
 		echo erro caminho de destino, verifique se $2 existe
+		exit 1
 	fi
 else
-	export DESTINO=/media/damato/wd_crypt/netshoes
+	if [ -a $DESTINOPADRAO ]
+	then
+		export DESTINO=$DESTINOPADRAO
+	else
+		echo Erro no caminho de destino, verifique se $DESTINO existe
+		exit 1
+	fi
 fi
 export TEMPOFILE=/tmp/backup.sh.tmp
 export TEMPOLISTA=/tmp/backup.sh.lista
@@ -71,6 +79,9 @@ case $1 in
 		criar
 		;;
 	remover)
+		remover
+		;;
+	apagar)
 		remover
 		;;
 	backup)
