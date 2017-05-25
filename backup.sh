@@ -6,7 +6,7 @@ function ajuda() {
 function criar() {
 	temporario=$(mktemp -d)
 	echo $temporario > $TEMPOFILE
-	lvcreate -s -L 20G -n snaph ubuntu-vg/damatoluks
+	lvcreate -s -L 10G -n snaph ubuntu-vg/damatoluks
 	cryptsetup open --type luks /dev/ubuntu-vg/snaph  snaph
 	mount -o ro /dev/mapper/snaph $temporario
 }
@@ -28,7 +28,7 @@ function home() {
 function gera_lista_home() {
 	echo Gerando lista do HOME
 	temporario=$(cat $TEMPOFILE)
-	ls -1a $temporario | egrep -wv "^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$" > $TEMPOLISTA
+	ls -1a $temporario | egrep -wv "^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {

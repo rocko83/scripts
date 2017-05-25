@@ -5,7 +5,7 @@ function help() {
         echo Como utilizar este comando:
         echo $0 \(dia\|hora\) \(quantidade de tempo\)
 }
-function fnmon() {
+function FNMON() {
         DURACAO=$(expr $2 \* 3600)
         INTERVALO=$1
         AMOSTRAS=$(expr $DURACAO \/ $INTERVALO)
@@ -18,17 +18,17 @@ case $# in
                         dia)
                                 if [ $2 -gt 1 ]
                                 then
-                                        fnmon $BASE_AMOSTRAS  $(expr $2 \* 24)
+                                        FNMON $BASE_AMOSTRAS  $(expr $2 \* 24)
                                 else
-                                        fnmon $DIA $(expr $2 \* 24 )
+                                        FNMON $DIA $(expr $2 \* 24 )
                                 fi
                                 ;;
                         hora)
                                 if [ $2 -gt 24 ]
                                 then
-                                        fnmon $BASE_AMOSTRAS $2
+                                        FNMON $BASE_AMOSTRAS $2
                                 else
-                                        fnmon $DIA $2
+                                        FNMON $DIA $2
                                 fi
                                 ;;
                         *)
