@@ -28,7 +28,7 @@ function home() {
 function gera_lista_home() {
 	echo Gerando lista do HOME
 	temporario=$(cat $TEMPOFILE)
-	ls -1a $temporario | egrep -wv "^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
+	ls -1a $temporario | egrep -wv "^Android|^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {
@@ -37,7 +37,7 @@ function backup() {
 	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
 	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
 	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
-	comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
+	#comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
 	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
 }
