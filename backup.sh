@@ -28,7 +28,7 @@ function home() {
 function gera_lista_home() {
 	echo Gerando lista do HOME
 	temporario=$(cat $TEMPOFILE)
-	ls -1a $temporario | egrep -wv "^Android|^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
+	ls -1a $temporario | egrep -wv "^.android|^Dropbox|^Documents2|^Desktop|^share.alexandredamato.com.br|^.steam|^VBOX2|^Android|^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {
@@ -40,6 +40,12 @@ function backup() {
 	#comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
 	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
+}
+function importante() {
+	echo Efetuando backups
+	temporario=$(cat $TEMPOFILE)
+	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
+	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
 }
 function config() {
 	apt list --installed > $DIRDESTINO/apt-list-installed
@@ -101,6 +107,11 @@ case $1 in
 		gera_lista_home
 		home
 		backup
+		;;
+	importante)
+		mkdir -p $DIRDESTINO
+		config
+		importante
 		;;
 	config)
 		config
