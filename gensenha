@@ -21,10 +21,13 @@ function NUMBER() {
 function HEXA() {
 	tr -dc A-F0-9 < /dev/urandom | head -c ${l} | xargs
 }
+function FAKEWWN() {
+	tr -dc A-F0-9 < /dev/urandom | head -c 16 | xargs  | sed -e "s/^0x//g" | sed -r "s/../&:/g" | sed -e "s/$://g" | tr "a-z" "A-Z" | sed -e "s/:$//g"
+}
 function HELP() {
 	echo HELP
 	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \<numero de caracteres\> \| \[ alto \| medio \| baixo \| numero \| hexa \] \<numero de caracteres\>
-	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \[ alto \| medio \| baixo \| numero \| hexa \]
+	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \[ alto \| medio \| baixo \| numero \| hexa \| fakewwn\]
 	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \#Opção default utiliza a complexidade alta com $tamanho caracteres
 }
 case $1 in 
@@ -42,6 +45,9 @@ case $1 in
 		;;
 	hexa)
 		HEXA
+		;;
+	fakewwn)
+		FAKEWWN  
 		;;
 	help)
 		HELP
