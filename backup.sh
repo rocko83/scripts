@@ -1,7 +1,7 @@
-#!/bin/bash -x
+#!/bin/bash 
 function ajuda() {
 	echo falta de argumentos
-	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config \| \[\Diretprio de destino\]
+	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config\/importante \| \[\Diretprio de destino\]
 }
 function criar() {
 	temporario=$(mktemp -d)

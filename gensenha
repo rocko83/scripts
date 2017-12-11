@@ -1,10 +1,52 @@
 #!/bin/bash
-if [ $# -eq 1 ]
+if [ $# -eq 2 ]
 then
-	tamanho=$1
+	export tamanho=$2
 else
-	tamanho=13
+	export tamanho=13
 fi
 [ "$l" == "" ] && l=$tamanho
-#tr -dc A-Za-z0-9!?@#_ < /dev/urandom | head -c ${l} | xargs
-tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+function HIGH() {
+	tr -dc A-Za-z0-9!?@#_ < /dev/urandom | head -c ${l} | xargs
+}
+function MEDIUM() {
+	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
+function LOW() {
+	tr -dc A-Za-z0-9 < /dev/urandom | head -c ${l} | xargs
+}
+function NUMBER() {
+	tr -dc 0-9 < /dev/urandom | head -c ${l} | xargs
+}
+function HEXA() {
+	tr -dc A-F0-9 < /dev/urandom | head -c ${l} | xargs
+}
+case $1 in 
+	lato)
+		HIGH
+		;;
+	medio)
+		MEDIUM
+		;;
+	baixo)
+		LOW
+		;;
+	numero)
+		NUMBER
+		;;
+	hexa)
+		HEXA
+		;;
+	*)
+		re='^[0-9]+$'
+		if ! [[ $1 =~ $re ]] 
+		then
+		   export tamanho=13
+		   [ "$l" == "" ] && l=$tamanho
+		else
+		   export tamanho=$1
+		   [ "$l" == "" ] && l=$tamanho
+		fi
+		HIGH
+		;;
+esac
