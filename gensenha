@@ -1,25 +1,24 @@
-#!/bin/bash
+#!/bin/bash -x 
 if [ $# -eq 2 ]
 then
 	export tamanho=$2
 else
 	export tamanho=13
 fi
-[ "$l" == "" ] && l=$tamanho
 function HIGH() {
-	tr -dc A-Za-z0-9!?@#_ < /dev/urandom | head -c ${l} | xargs
+	tr -dc A-Za-z0-9!?@#_ < /dev/urandom | head -c ${tamanho} | xargs
 }
 function MEDIUM() {
-	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+	tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${tamanho} | xargs
 }
 function LOW() {
-	tr -dc A-Za-z0-9 < /dev/urandom | head -c ${l} | xargs
+	tr -dc A-Za-z0-9 < /dev/urandom | head -c ${tamanho} | xargs
 }
 function NUMBER() {
-	tr -dc 0-9 < /dev/urandom | head -c ${l} | xargs
+	tr -dc 0-9 < /dev/urandom | head -c ${tamanho} | xargs
 }
 function HEXA() {
-	tr -dc A-F0-9 < /dev/urandom | head -c ${l} | xargs
+	tr -dc A-F0-9 < /dev/urandom | head -c ${tamanho} | xargs
 }
 function FAKEWWN() {
 	tr -dc A-F0-9 < /dev/urandom | head -c 16 | xargs  | sed -e "s/^0x//g" | sed -r "s/../&:/g" | sed -e "s/$://g" | tr "a-z" "A-Z" | sed -e "s/:$//g"
@@ -60,10 +59,8 @@ case $1 in
 		if ! [[ $1 =~ $re ]] 
 		then
 		   export tamanho=13
-		   [ "$l" == "" ] && l=$tamanho
 		else
 		   export tamanho=$1
-		   [ "$l" == "" ] && l=$tamanho
 		fi
 		HIGH
 		;;
