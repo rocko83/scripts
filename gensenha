@@ -21,8 +21,14 @@ function NUMBER() {
 function HEXA() {
 	tr -dc A-F0-9 < /dev/urandom | head -c ${l} | xargs
 }
+function HELP() {
+	echo HELP
+	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \<numero de caracteres\> \| \[ alto \| medio \| baixo \| numero \| hexa \] \<numero de caracteres\>
+	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \[ alto \| medio \| baixo \| numero \| hexa \]
+	echo $(echo $0 | tr '\/' '\n' | tail -n 1) \#Opção default utiliza a complexidade alta com $tamanho caracteres
+}
 case $1 in 
-	lato)
+	alto)
 		HIGH
 		;;
 	medio)
@@ -36,6 +42,12 @@ case $1 in
 		;;
 	hexa)
 		HEXA
+		;;
+	help)
+		HELP
+		;;
+	ajuda)
+		HELP
 		;;
 	*)
 		re='^[0-9]+$'
