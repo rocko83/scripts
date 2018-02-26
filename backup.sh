@@ -1,21 +1,22 @@
-#!/bin/bash 
+#!/bin/bash  -x
 function ajuda() {
 	echo falta de argumentos
 	echo criar\/remover\/backup\/home\/gerahome\/tudo\/config\/importante \| \[\Diretprio de destino\]
 }
 function criar() {
 	temporario=$(mktemp -d)
-	echo $temporario > $TEMPOFILE
-	lvcreate -s -L 10G -n snaph ubuntu-vg/damatoluks
-	cryptsetup open --type luks /dev/ubuntu-vg/snaph  snaph
-	mount -o ro /dev/mapper/snaph $temporario
+	#echo $temporario > $TEMPOFILE
+	echo /home/damato > $TEMPOFILE
+	#lvcreate -s -L 10G -n snaph ubuntu-vg/damatoluks
+	#cryptsetup open --type luks /dev/ubuntu-vg/snaph  snaph
+	#mount -o ro /dev/mapper/snaph $temporario
 }
-function remover() {
-	temporario=$(cat $TEMPOFILE)
-	umount $temporario
-	cryptsetup close /dev/mapper/snaph
-	lvremove -f ubuntu-vg/snaph
-}
+#function remover() {
+	#temporario=$(cat $TEMPOFILE)
+	#umount $temporario
+	#cryptsetup close /dev/mapper/snaph
+	#lvremove -f ubuntu-vg/snaph
+#}
 function home() {
 	echo Efetuando backup do HOME
 	temporario=$(cat $TEMPOFILE)
@@ -28,18 +29,24 @@ function home() {
 function gera_lista_home() {
 	echo Gerando lista do HOME
 	temporario=$(cat $TEMPOFILE)
-	ls -1a $temporario | egrep -wv "^.android|^Dropbox|^Documents2|^Desktop|^share.alexandredamato.com.br|^.steam|^VBOX2|^Android|^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud" > $TEMPOLISTA
+	ls -1a $temporario | egrep -wv "^.android|^Dropbox|^Documents2|^Desktop|^share.alexandredamato.com.br|^.steam|^VBOX2|^Android|^programas|^Pictures|^projetos|^Downloads|^Downloads2|^Documents|^lost\+found|^tmp|^VBOX|^Videos|^.$|^..$|^ownCloud|^.cache" > $TEMPOLISTA
 	echo Lista gerada em $TEMPOLISTA
 }
 function backup() {
 	echo Efetuando backups
 	temporario=$(cat $TEMPOFILE)
-	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
-	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
 	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
 	#comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
 	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
 	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
+}
+function wiki() {
+	temporario=$(cat $TEMPOFILE)
+	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
+}
+function w10() {
+	temporario=$(cat $TEMPOFILE)
+	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
 }
 function importante() {
 	echo Efetuando backups
@@ -94,6 +101,14 @@ case $1 in
 		mkdir -p $DIRDESTINO
 		backup
 		;;
+	wiki)
+		mkdir -p $DIRDESTINO
+		wiki
+		;;
+	w10)
+		mkdir -p $DIRDESTINO
+		w10
+		;;
 	gerahome)
 		gera_lista_home
 		;;
@@ -105,8 +120,8 @@ case $1 in
 		mkdir -p $DIRDESTINO
 		config
 		gera_lista_home
-		home
 		backup
+		home
 		;;
 	importante)
 		mkdir -p $DIRDESTINO
