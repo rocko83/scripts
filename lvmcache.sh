@@ -1,7 +1,7 @@
 #!/bin/bash -x
 export tempo=1
 export VGNAME=ubuntu-vg
-export LVNAME=damatoluks
+export LVNAME=home
 function looplivre() {
 	seq 1 100 | \
 	while read valor
