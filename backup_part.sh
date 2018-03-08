@@ -24,6 +24,6 @@ awk '{print $1 " " $2}' | \
 while read device mountpoint fstype
 do 
 	umount $mountpoint
-	partclone.$fstype -o - -c -s $device | pigz -p  $(lscpu | grep ^CPU\( | awk '{print $2}') | split  -b 1G - boot.
+	partclone.ext2 -o - -c -s $device | pigz -p  $(lscpu | grep ^CPU\( | awk '{print $2}') | split  -b 1G - boot.
 	mount $mountpoint
 done
