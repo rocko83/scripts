@@ -38,15 +38,16 @@ function backup() {
 	comprimir $temporario/projetos/ $DIRDESTINO/projetos.tgz
 	#comprimir $temporario/programas/ $DIRDESTINO/programas.tgz
 	comprimir $temporario/Pictures/ $DIRDESTINO/pic.tgz
-	comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
+	#comprimir $temporario/Documents/ $DIRDESTINO/doc.tgz
+	comprimir /home/damato/oc.netshoes.local/Documents $DIRDESTINO/doc.tgz
 }
 function wiki() {
 	temporario=$(cat $TEMPOFILE)
-	comprimir $temporario/VBOX/Producao/wiki/ $DIRDESTINO/wiki.tgz
+	comprimir $temporario/VBOX/vmwiki1804_/ $DIRDESTINO/wiki.tgz
 }
 function w10() {
 	temporario=$(cat $TEMPOFILE)
-	comprimir $temporario/VBOX/Producao/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
+	comprimir $temporario/VBOX/NETSHOES-W10/ $DIRDESTINO/NETSHOES-W10.tgz
 }
 function importante() {
 	echo Efetuando backups

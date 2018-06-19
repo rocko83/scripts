@@ -1,32 +1,17 @@
-#!/bin/bash -x
-export RESULTADOS=()
-export ITERACAO=1
-function ajuda() {
+#!/bin/#!/usr/bin/env bash
+function AJUDA() {
 	echo ajuda
 }
-function pingar() {
-	ping -c 1 $1 2> /dev/null > /dev/null
-	retorno1=$?
-	ping -c 1 $1 2> /dev/null > /dev/null
-	retorno2=$?
-	if [ $retorno1 -eq 0 ] && [ $retorno2 -eq 0 ]
-	then
-		echo 0
-	else
-		echo 1
-	fi
+function PINGAR() {
+	RETORNO=$(ping -c 1 $1)
+	echo $RETORNO\;$1
 }
-if [ $# -eq 0 ] 
+if [ $# -eq 0 ]
 then
-	ajuda
+	AJUDA
+	exit 1
 else
-	echo $* | \
-	tr ' ' '\n' |\
-	while read endereco
-	do
-		RESULTADOS[$ITERACAO]=$(pingar $endereco):$endereco
-		((ITERACAO+=1))
-		declare -p RESULTADOS
-	done
+	ARRAY=()
+	declare -a ARRAY
+	ARRAY+=$(cat $1)
 fi
-declare -p RESULTADOS
