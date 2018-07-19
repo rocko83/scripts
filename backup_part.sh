@@ -6,20 +6,20 @@ then
 fi
 export BACKUPPATH=$1
 export BACKUPOUTPUT=$BACKUPPATH/$(date +"%Y%m%d%H%M%S")
-export VG=ubuntu-vg
+export VG=linux
 mkdir -p $BACKUPOUTPUT
 cd $BACKUPOUTPUT
 function dobackup() {
 
-	lvcreate -s -n snap -L 500M $1/$2
-	#lvcreate -s -n snap -L 1G $1/$2
+	#lvcreate -s -n snap -L 500M $1/$2
+	lvcreate -s -n snap -L 5G $1/$2
 	e2fsck -f /dev/$1/snap
 	tune2fs -U $(uuidgen ) /dev/$1/snap
 	partclone.ext4 -o - -c -s /dev/$1/snap | pigz -p $(lscpu | grep ^CPU\( | awk '{print $2}') | split  -b 1G - $BACKUPOUTPUT/$2.
 	lvremove $1/snap -f
 }
 
-lvs $VG | egrep -vw "backup|home|LV|swap_1" |awk '{print $1 " " $2 }'| tail -n $( expr $(lvs $VG | wc -l ) - 1 ) |while read  lv vg; do dobackup $vg $lv;done
+lvs $VG | egrep -vw "bkp|backup|home|LV|swap_1" |awk '{print $1 " " $2 }'| tail -n $( expr $(lvs $VG | wc -l ) - 1 ) |while read  lv vg; do dobackup $vg $lv;done
 umount /boot/efi
 umount /boot
 partclone.ext2 -o - -c -s /dev/sda1 | pigz -p  $(lscpu | grep ^CPU\( | awk '{print $2}') | split  -b 1G - boot.
