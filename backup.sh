@@ -118,10 +118,13 @@ case $1 in
 		home
 		;;
 	tudo)
+		criar
 		mkdir -p $DIRDESTINO
 		config
-		gera_lista_home
+		wiki
 		backup
+		w10
+		gera_lista_home
 		home
 		;;
 	importante)

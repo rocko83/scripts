@@ -29,7 +29,7 @@ function GETVMNICBYNAME() {
   az vm list --query "[].[id,name]" -o tsv |  \
   while read ID NAME
   do
-    export RC=$(echo $(echo $NAME | tr '[A-Z]' '[a-z]') | grep -iw  $1 | wc -l)
+    export RC=$(echo $(echo $NAME | tr '[A-Z]' '[a-z]') | grep -i  $1 | wc -l)
     if [ $RC -eq 1 ]
     then
       GETVMNIC $ID  | \
@@ -50,7 +50,7 @@ function GETVMNICBYRG() {
       GETVMNIC $ID  | \
       while read NIC NICRG
       do
-        echo $(GETNIC $NIC $NAME $NICRG) $NAME
+        echo $(GETNIC $NIC $NAME $NICRG) $NAME $(az vm show --ids $ID --query "[hardwareProfile.vmSize,location]" -o tsv )
       done
     fi
   done
@@ -59,7 +59,7 @@ function GETVMIDBYNAME() {
   az vm list --query "[].[id,name]" -o tsv |  \
   while read ID NAME
   do
-    export RC=$(echo $(echo $NAME | tr '[A-Z]' '[a-z]') | grep -iw  $1 | wc -l)
+    export RC=$(echo $(echo $NAME | tr '[A-Z]' '[a-z]') | grep -i  $1 | wc -l)
     if [ $RC -eq 1 ]
     then
       echo $ID
