@@ -20,7 +20,7 @@ function GETVMNICBYTAG() {
       GETVMNIC $ID | \
       while read NIC NICRG
       do
-        echo $(GETNIC $NIC $NAME $NICRG) $NAME
+        echo $(GETNIC $NIC $NAME $NICRG) $NAME $(az vm show --ids $ID --query "[hardwareProfile.vmSize,location,resourceGroup]" -o tsv )
       done
     fi
   done
@@ -35,7 +35,7 @@ function GETVMNICBYNAME() {
       GETVMNIC $ID  | \
       while read NIC NICRG
       do
-        echo $(GETNIC $NIC $NAME $NICRG) $NAME
+        echo $(GETNIC $NIC $NAME $NICRG) $NAME $(az vm show --ids $ID --query "[hardwareProfile.vmSize,location,resourceGroup]" -o tsv )
       done
     fi
   done
@@ -50,7 +50,7 @@ function GETVMNICBYRG() {
       GETVMNIC $ID  | \
       while read NIC NICRG
       do
-        echo $(GETNIC $NIC $NAME $NICRG) $NAME $(az vm show --ids $ID --query "[hardwareProfile.vmSize,location]" -o tsv )
+        echo $(GETNIC $NIC $NAME $NICRG) $NAME $(az vm show --ids $ID --query "[hardwareProfile.vmSize,location,resourceGroup]" -o tsv )
       done
     fi
   done
@@ -112,7 +112,7 @@ else
      nic )
       case $KEY2 in
         tag )
-          GETVMNICBYTAG $(echo $3 | tr '[A-Z]' '[a-z]')
+          GETVMNICBYTAG $3
           ;;
         name )
           GETVMNICBYNAME $(echo $3 | tr '[A-Z]' '[a-z]')
@@ -131,7 +131,7 @@ else
           GETVMIDBYNAME $(echo $3 | tr '[A-Z]' '[a-z]')
           ;;
         tag )
-          GETVMIDBYTAG $(echo $3 | tr '[A-Z]' '[a-z]')
+          GETVMIDBYTAG $3
           ;;
         rg )
           GETVMIDBYRG $(echo $3 | tr '[A-Z]' '[a-z]')
