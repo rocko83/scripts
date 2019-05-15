@@ -53,7 +53,7 @@ function looplivre() {
     do
         retorno=$(losetup -a | grep -w /dev/loop$valor| wc -l)
         if [ $retorno -eq 0 ]
-            then echo /dev/loop$valor
+            then echo $valor /dev/loop$valor
             break
         fi
     done
