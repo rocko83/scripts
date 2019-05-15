@@ -46,6 +46,20 @@ function BANNER() {
   esac
 
 }
+function Tempfunc() {
+	case $1 in
+	criar)
+		$CMD_MKTEMP -p /tmp --suffix ssh-netshoe
+		;;
+	apagar)
+		$CMD_RM -f $2
+		;;
+	*)
+		echo erro
+		exit 1
+		;;
+	esac
+}
 function looplivre() {
 		export primeiro=$1
     seq $primeiro 1000 | \
@@ -59,14 +73,15 @@ function looplivre() {
     done
 }
 function abrirloops() {
-		export primeiro=1
+		export seqcontroller=$(Tempfunc criar)
+		echo 1 > $seqcontroller
     ls -1 $1/data.* | while read datafile
     do
 			#echo Montando loop para $datafile
-			looplivre | while read sequencia looplivre
+			looplivre $(cat $seqcontroller)| while read sequencia looplivre
 			do
 				losetup $looplivre $datafile
-				export primeiro=$sequencia
+				echo $sequencia > $seqcontroller
       done
     done
 }
