@@ -47,7 +47,8 @@ function BANNER() {
 
 }
 function looplivre() {
-    seq 1 100 | \
+		export primeiro=$1
+    seq $primeiro 1000 | \
     while read valor
     do
         retorno=$(losetup -a | grep -w /dev/loop$valor| wc -l)
@@ -58,10 +59,15 @@ function looplivre() {
     done
 }
 function abrirloops() {
+		export primeiro=1
     ls -1 $1/data.* | while read datafile
     do
 			#echo Montando loop para $datafile
-      losetup $(looplivre) $datafile
+			looplivre | while read sequencia looplivre
+			do
+				losetup $looplivre $datafile
+				export primeiro=$sequencia
+      done
     done
 }
 function listar() {
