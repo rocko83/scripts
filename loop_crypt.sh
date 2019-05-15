@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 function HIGH() {
 	tr -dc A-Za-z0-9!?@#_ < /dev/urandom | head -c ${tamanho} | xargs
 }
@@ -52,7 +52,7 @@ function looplivre() {
     do
         retorno=$(losetup -a | grep -w /dev/loop$valor| wc -l)
         if [ $retorno -eq 0 ]
-            then echo /dev/loop$valor
+            then echo Loop livre /dev/loop$valor
             break
         fi
     done
@@ -60,6 +60,7 @@ function looplivre() {
 function abrirloops() {
     ls -1 $1/data.* | while read datafile
     do
+			echo Montando loop para $datafile
       losetup $(looplivre) $datafile
     done
 }
