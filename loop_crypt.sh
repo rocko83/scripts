@@ -49,10 +49,10 @@ function BANNER() {
 function Tempfunc() {
 	case $1 in
 	criar)
-		$CMD_MKTEMP -p /tmp --suffix ssh-netshoe
+		mktemp -p /tmp --suffix ssh-netshoe
 		;;
 	apagar)
-		$CMD_RM -f $2
+		rm -f $2
 		;;
 	*)
 		echo erro
@@ -84,6 +84,7 @@ function abrirloops() {
 				echo $sequencia > $seqcontroller
       done
     done
+		Tempfunc apagar $seqcontroller
 }
 function listar() {
   ls -1 $1    |\
