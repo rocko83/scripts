@@ -82,18 +82,31 @@ function format() {
     awk -F . '{print $2}' | \
     while read indice
     do
-      echo $loopdevice $indice
+      echo Formatando $loopdevice $indice
+      #echo $loopdevice $indice
       cryptsetup luksFormat --type luks2  $loopdevice code.$indice
     done
   done
 }
 function gencode() {
   export tamanho=200
-  seq 1 $(listar $1 | wc -l ) | \
-  while read indice
+	listar $1 | while read loopdevice
   do
-    HIGH > code.$indice
+    losetup $loopdevice | \
+    awk '{print $3}' | \
+    sed -e "s/(//g" -e "s/)//g" | \
+    awk -F . '{print $2}' | \
+    while read indice
+    do
+      echo Criando chave para  $loopdevice $indice
+      HIGH > code.$indice
+    done
   done
+  # seq 1 $(listar $1 | wc -l ) | \
+  # while read indice
+  # do
+  #   HIGH > code.$indice
+  # done
 }
 function abrir_crypt() {
   listar $1 | while read loopdevice
@@ -150,8 +163,7 @@ else
 	then
 		case $1 in
 			criar)
-				abrirloops $CAMINHO
-				listar $CAMINHO
+			  abrirloops $CAMINHO
 				gencode $CAMINHO
 				format $CAMINHO
 				abrir_crypt $CAMINHO
@@ -160,7 +172,7 @@ else
 				;;
 			abrir)
 				abrirloops $CAMINHO
-				listar $CAMINHO
+				#listar $CAMINHO
 				abrir_crypt $CAMINHO
 				importarvg
 				;;
