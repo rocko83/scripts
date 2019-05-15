@@ -52,7 +52,7 @@ function looplivre() {
     do
         retorno=$(losetup -a | grep -w /dev/loop$valor| wc -l)
         if [ $retorno -eq 0 ]
-            then echo Loop livre /dev/loop$valor
+            then echo /dev/loop$valor
             break
         fi
     done
@@ -83,7 +83,7 @@ function format() {
     awk -F . '{print $2}' | \
     while read indice
     do
-      echo Formatando $loopdevice $indice
+      # echo Formatando $loopdevice $indice
       #echo $loopdevice $indice
       cryptsetup luksFormat --type luks2  $loopdevice code.$indice
     done
@@ -99,7 +99,7 @@ function gencode() {
     awk -F . '{print $2}' | \
     while read indice
     do
-      echo Criando chave para  $loopdevice $indice
+      # echo Criando chave para  $loopdevice $indice
       HIGH > code.$indice
     done
   done
@@ -118,7 +118,7 @@ function abrir_crypt() {
     awk -F . '{print $2}' | \
     while read indice
     do
-      echo $loopdevice $indice
+      # echo $loopdevice $indice
       # cryptsetup luksFormat --type luks2  $loopdevice code.$indice
       cryptsetup open --type luks2 --key-file code.$indice $loopdevice data.$indice
     done
