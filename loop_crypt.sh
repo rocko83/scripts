@@ -118,8 +118,9 @@ function exportarvg() {
 	vgexport datacrypt
 }
 function importarvg() {
-	vgchange -ay datacrypt
 	vgimport datacrypt
+	vgchange -ay datacrypt
+
 }
 function fechar_crypt() {
 
