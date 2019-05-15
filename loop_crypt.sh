@@ -60,7 +60,7 @@ function looplivre() {
 function abrirloops() {
     ls -1 $1/data.* | while read datafile
     do
-			echo Montando loop para $datafile
+			#echo Montando loop para $datafile
       losetup $(looplivre) $datafile
     done
 }
